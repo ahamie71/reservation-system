@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card bg-dark text-light shadow-lg" style="width: 100%; max-width: 500px;">
+        <div class="card-header text-center border-bottom border-warning">
+            <h2 class="text-warning mb-0">Créer un compte</h2>
+        </div>
+
+        <div class="card-body">
+            {{ form_start(registrationForm) }}
+
+                {{ form_row(registrationForm.username, {
+                    'label': 'Nom d\'utilisateur',
+                    'attr': {'class': 'form-control'}
+                }) }}
+
+                {{ form_row(registrationForm.email, {
+                    'label': 'Adresse email',
+                    'attr': {'class': 'form-control'}
+                }) }}
+
+                {{ form_row(registrationForm.plainPassword, {
+                    'label': 'Mot de passe',
+                    'attr': {'class': 'form-control'}
+                }) }}
+
+                {{ form_row(registrationForm.agreeTerms, {
+                    'label': 'J\'accepte les conditions d\'utilisation'
+                }) }}
+
+                <div class="d-grid mt-3">
+                    <button type="submit" class="btn btn-warning fw-bold">
+                        <i class="bi bi-person-plus-fill"></i> S'inscrire
+                    </button>
+                </div>
+
+            {{ form_end(registrationForm) }}
+        </div>
+
+        <div class="card-footer text-center bg-dark border-top border-warning">
+            <span class="text-light">Déjà un compte ?</span>
+            <a href="{{ path('app_login') }}" class="fw-bold ms-1 text-warning text-decoration-underline">
+                Se connecter
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

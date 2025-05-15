@@ -1,0 +1,169 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .animate-zoomIn {
+            animation: zoomIn 0.6s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+
+        .banner {
+            background-image: url('{{ asset("images/paris_event_center_venues_hero_0.jpg") }}');
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFD700;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            background-blend-mode: multiply;
+            background-color: #000;
+            animation: zoomIn 1.2s ease forwards;
+        }
+
+        nav.navbar {
+            background-color: #000 !important;
+        }
+        nav.navbar a.navbar-brand,
+        nav.navbar .nav-link,
+        nav.navbar-toggler-icon {
+            color: #FFD700 !important;
+        }
+        nav.navbar .nav-link:hover {
+            color: #fff !important;
+        }
+
+        .card {
+            background-color: #000;
+            color: #FFD700;
+            border: 2px solid #FFD700;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 15px #FFD700;
+        }
+
+        .card-body i {
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background-color: #FFD700;
+            border-color: #FFD700;
+            color: #000;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #e6c200;
+            border-color: #e6c200;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        h1, h2, h5 {
+            color: #FFD700;
+        }
+
+        p {
+            color: #f0e68c;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="banner">
+    <div class="text-center px-3 animate-fadeInUp">
+        <h1 class="display-4">{{ app_name }}</h1>
+        <p class="lead">{{ app_description }}</p>
+        <a href="{{ path('event_index') }}" class="btn btn-primary btn-lg mt-3">
+            <i class="fas fa-calendar-alt"></i> Voir les événements
+        </a>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4 animate-fadeInUp">Fonctionnalités</h2>
+    <div class="row text-center">
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm animate-zoomIn delay-1">
+                <div class="card-body">
+                    <i class="fas fa-calendar-plus fa-3x"></i>
+                    <h5 class="card-title">Créer un événement</h5>
+                    <p class="card-text">Créez facilement vos événements et gérez-les depuis votre espace personnel.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm animate-zoomIn delay-2">
+                <div class="card-body">
+                    <i class="fas fa-ticket-alt fa-3x"></i>
+                    <h5 class="card-title">Réserver des billets</h5>
+                    <p class="card-text">Les utilisateurs peuvent réserver leurs places rapidement en ligne.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm animate-zoomIn delay-3">
+                <div class="card-body">
+                    <i class="fas fa-user-lock fa-3x"></i>
+                    <h5 class="card-title">Espace sécurisé</h5>
+                    <p class="card-text">Inscription, connexion et gestion de profil via une authentification sécurisée.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm animate-zoomIn delay-4">
+                <div class="card-body">
+                    <i class="fab fa-bootstrap fa-3x"></i>
+                    <h5 class="card-title">Design responsive</h5>
+                    <p class="card-text">Interface moderne et adaptée à tous les appareils grâce à Bootstrap 5.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

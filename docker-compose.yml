@@ -1,0 +1,74 @@
+
+
+
+services:
+  db1:
+    image: mariadb:10.11
+    command: --wsrep-new-cluster
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: reservation_events
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+      MYSQL_ROOT_HOST: '%'
+      WSREP_CLUSTER_NAME: "galera_cluster"
+      WSREP_NODE_ADDRESS: db1
+      WSREP_CLUSTER_ADDRESS: "gcomm://db1,db2,db3"
+      WSREP_SST_METHOD: rsync
+    volumes:
+      - dbdata1:/var/lib/mysql
+    networks:
+      backend:
+        aliases:
+          - db1
+
+  db2:
+    image: mariadb:10.11
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      WSREP_CLUSTER_NAME: "galera_cluster"
+      WSREP_NODE_ADDRESS: db2
+      WSREP_CLUSTER_ADDRESS: "gcomm://db1,db2,db3"
+      WSREP_SST_METHOD: rsync
+    volumes:
+      - dbdata2:/var/lib/mysql
+    networks:
+      backend:
+        aliases:
+          - db2
+
+  db3:
+    image: mariadb:10.11
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      WSREP_CLUSTER_NAME: "galera_cluster"
+      WSREP_NODE_ADDRESS: db3
+      WSREP_CLUSTER_ADDRESS: "gcomm://db1,db2,db3"
+      WSREP_SST_METHOD: rsync
+    volumes:
+      - dbdata3:/var/lib/mysql
+    networks:
+      backend:
+        aliases:
+          - db3
+
+  app:
+    build: .
+    depends_on:
+      - db1
+      - db2
+      - db3
+    ports:
+      - "8000:80"
+    environment:
+      DATABASE_URL: "mysql://symfony:symfony@db1:3306/reservation_events?serverVersion=mariadb-10.11.0"
+    networks:
+      - backend
+
+volumes:
+  dbdata1:
+  dbdata2:
+  dbdata3:
+
+networks:
+  backend:

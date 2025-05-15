@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Réservations{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Mes Réservations</h1>
+
+        {% if reservations is empty %}
+            <p>Vous n'avez aucune réservation.</p>
+        {% else %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Événement</th>
+                        <th>Date</th>
+                        <th>Lieu</th>
+                        <th>Prix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in reservations %}
+                        <tr>
+                            <td>{{ reservation.event.name }}</td>
+                            <td>{{ reservation.event.date ? reservation.event.date|date('d/m/Y H:i') : 'Non définie' }}</td>
+                            <td>{{ reservation.event.location }}</td>
+                            <td>{{ reservation.event.price }} €</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

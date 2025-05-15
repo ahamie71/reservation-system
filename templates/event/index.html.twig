@@ -1,0 +1,136 @@
+{# templates/event/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des événements{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-warning text-center">Événements</h1>
+
+   {# Formulaire de filtre #}
+   <div class="card bg-dark text-light mb-5 p-4 border-warning border-2 shadow">
+   <h4 class="text-warning mb-4 d-flex align-items-center gap-2">
+       <i class="bi bi-funnel-fill"></i> Recherche avancée
+   </h4>
+
+   {{ form_start(filterForm) }}
+   <div class="row gy-3 gx-3">
+
+       <div class="col-md-4 col-lg-3">
+           {{ form_widget(filterForm.name, {
+               'attr': {'class': 'form-control bg-secondary text-light border-0', 'placeholder': '🔎 Nom'}
+           }) }}
+       </div>
+
+       <div class="col-md-4 col-lg-3">
+           {{ form_widget(filterForm.location, {
+               'attr': {'class': 'form-control bg-secondary text-light border-0', 'placeholder': '📍 Lieu'}
+           }) }}
+       </div>
+
+       <div class="col-md-4 col-lg-2">
+           {{ form_widget(filterForm.minPrice, {
+               'attr': {'class': 'form-control bg-secondary text-light border-0', 'placeholder': '€ Min'}
+           }) }}
+       </div>
+
+       <div class="col-md-4 col-lg-2">
+           {{ form_widget(filterForm.maxPrice, {
+               'attr': {'class': 'form-control bg-secondary text-light border-0', 'placeholder': '€ Max'}
+           }) }}
+       </div>
+
+       <div class="col-md-6 col-lg-3">
+           {{ form_widget(filterForm.startDate, {
+               'attr': {'class': 'form-control bg-secondary text-light border-0', 'placeholder': '📅 Début'}
+           }) }}
+       </div>
+
+       <div class="col-md-6 col-lg-3">
+           {{ form_widget(filterForm.endDate, {
+               'attr': {'class': 'form-control bg-secondary text-light border-0', 'placeholder': '📅 Fin'}
+           }) }}
+       </div>
+
+       <div class="col-12 d-flex justify-content-end gap-2 mt-2">
+           <button type="submit" class="btn btn-warning px-4">
+               <i class="bi bi-search"></i> Filtrer
+           </button>
+           <a href="{{ path('event_index') }}" class="btn btn-outline-light">
+               <i class="bi bi-x-lg"></i> Réinitialiser
+           </a>
+       </div>
+   </div>
+   {{ form_end(filterForm) }}
+</div>
+
+
+    {# Liste des événements #}
+    {% if events is empty %}
+        <p class="text-center text-light">Aucun événement trouvé.</p>
+    {% else %}
+        <div class="row g-4">
+            {% for event in events %}
+                <div class="col-md-4">
+                    <div class="card bg-secondary text-white h-100 shadow-sm">
+                        {% if event.image %}
+                            <img src="{{ asset('images/' ~ event.image) }}" class="card-img-top" alt="Image de {{ event.name }}">
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h4 class="card-title">{{ event.name }}</h4>
+                            <p class="card-text mb-1">
+                                <i class="bi bi-calendar-event"></i>
+                                <strong>Date :</strong> {{ event.date ? event.date|date('d/m/Y H:i') : 'Non définie' }}
+                            </p>
+                            <p class="card-text mb-1">
+                                <i class="bi bi-geo-alt"></i>
+                                <strong>Lieu :</strong> {{ event.location }}
+                            </p>
+                            <p class="card-text mb-1">
+                                <i class="bi bi-currency-euro"></i>
+                                <strong>Prix :</strong> {{ event.price }} €
+                            </p>
+                            <p class="card-text flex-grow-1">
+                                <i class="bi bi-info-circle"></i>
+                                <strong>Description :</strong><br>
+                                {{ event.description }}
+                            </p>
+
+                            <div class="mt-2 d-flex justify-content-between">
+                                
+                            <a href="{{ path('event_reserve', {'id': event.id}) }}" class="btn btn-warning btn-sm">
+                        <i class="bi bi-calendar-plus"></i> Réserver
+                    </a>
+                    
+                              
+
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('event_delete', {'id': event.id}) }}"
+                                       onclick="return confirm('Supprimer cet événement ?')"
+                                       class="btn btn-outline-light btn-sm">
+                                        <i class="bi bi-trash"></i> Supprimer
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# Bouton création (admin uniquement) #}
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="text-center mt-5">
+            <a href="{{ path('event_new') }}" class="btn btn-warning btn-lg">
+                <i class="bi bi-plus-circle"></i> Créer un nouvel événement
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{# templates/event/edit.html.twig #}
+
+<h1>Edit Event</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.date) }}
+        {{ form_row(form.location) }}
+        {{ form_row(form.price) }}
+        {{ form_row(form.description) }}
+        <button class="btn">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+    
